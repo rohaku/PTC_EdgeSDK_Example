@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <configuration debug="true">
+    <!--
+         ^^^^ Configuration debug to true to force logback debug output.
+     -->
+
+    <!-- standardize the timestamp format -->
+    <timestamp key="logTimeStamp" datePattern="yyyyMMdd'_'HHmmss" />
+
+    <!-- the name of the test suite appenders -->
+    <property scope="context" name="consoleAppenderName" value="STDOUT" />
+    <property scope="context" name="fileAppenderName" value="steamSensorFileAppender" />
+    <property scope="context" name="logDirectory" value="./logs/" />
+
+    <!-- standardize log message format -->
+    <property scope="context" name="logPattern" value="%date{yyyy-MM-dd HH:mm:ss.SSSZ} [L: %level] [O: %logger{8}] [M: %method] [T: %thread] %msg%n%rootException" />
+
+    <!-- The appender for console output - namely STDOUT. IDEs likely interface with this -->
+    <appender name="${consoleAppenderName}" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- The appender for logfile output. All logged output goes here.  -->
+    <appender name="${fileAppenderName}" class="ch.qos.logback.core.FileAppender">
+        <file>${logDirectory}/SteamSensor.log</file>
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- loggers -->
+
+    <!-- SDK loggers -->
+    <logger name="com.thingworx" level="DEBUG" />
+    
+    <!-- websocket-level logging -->
+    <logger name="com.thingworx.communications.client.connection.netty" level="ERROR"></logger>
+    <logger name="io.netty" level="WARN" />
+
+    <!-- level overrides -->
+    <!--
+     <logger name="com.thingworx.communications.client.connection.netty" level="ERROR"></logger>
+     <logger name="com.thingworx.communications.common.endpoints" level="DEBUG"></logger>
+     <logger name="com.thingworx.communications.client.endpoints" level="DEBUG"></logger>
+     -->
+
+    <root level="INFO">
+        <appender-ref ref="${consoleAppenderName}" />
+        <appender-ref ref="${fileAppenderName}" />
+    </root>
+</configuration>
